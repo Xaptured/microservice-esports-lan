@@ -29,4 +29,11 @@ public class EventService {
         }
         return theJackFolioDBClientHelper.fetchFutureEventsWRTEmail(email);
     }
+
+    public List<Event> fetchPastEventsWRTEmail(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchPastEventsWRTEmail(email);
+    }
 }

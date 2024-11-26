@@ -33,11 +33,24 @@ public class TheJackFolioDBClientHelper {
             LOGGER.info("Calling database client to get list of future event for email: {}", email);
             return theJackFolioDBClient.fetchFutureEventsWRTEmail(email).getBody();
         } catch (BadRequestErrorException exception) {
-            LOGGER.error("Got exception while getting lan event details");
-            throw new BadRequestErrorException("Got exception while getting lan event details: " + exception.getMessage(), exception);
+            LOGGER.error("Got exception while getting future lan event details");
+            throw new BadRequestErrorException("Got exception while getting future lan event details: " + exception.getMessage(), exception);
         } catch (InternalErrorException exception) {
-            LOGGER.error("Got exception while getting lan event details");
-            throw new InternalErrorException("Got exception while getting lan event details: " + exception.getMessage(), exception);
+            LOGGER.error("Got exception while getting future lan event details");
+            throw new InternalErrorException("Got exception while getting lan future event details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Event> fetchPastEventsWRTEmail(String email) {
+        try {
+            LOGGER.info("Calling database client to get list of past event for email: {}", email);
+            return theJackFolioDBClient.fetchPastEventsWRTEmail(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while getting past lan event details");
+            throw new BadRequestErrorException("Got exception while getting past lan event details: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while getting past lan event details");
+            throw new InternalErrorException("Got exception while getting past lan event details: " + exception.getMessage(), exception);
         }
     }
 }
