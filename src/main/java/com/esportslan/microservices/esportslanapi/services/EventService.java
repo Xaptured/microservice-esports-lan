@@ -1,10 +1,14 @@
 package com.esportslan.microservices.esportslanapi.services;
 
 import com.esportslan.microservices.esportslanapi.clienthelpers.TheJackFolioDBClientHelper;
+import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.servicehelpers.EventServiceHelper;
+import com.esportslan.microservices.esportslanapi.utilities.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EventService {
@@ -17,5 +21,12 @@ public class EventService {
     public void saveOrUpdateEvent(Event event) {
         eventServiceHelper.validateEvent(event);
         theJackFolioDBClientHelper.saveOrUpdateEvent(event);
+    }
+
+    public List<Event> fetchFutureEventsWRTEmail(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchFutureEventsWRTEmail(email);
     }
 }

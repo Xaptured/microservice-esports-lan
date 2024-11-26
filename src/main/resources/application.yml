@@ -16,3 +16,14 @@ resilience4j:
       save-or-update-event-retry:
         max-attempts: 3
         wait-duration: 5s
+        ignore-exceptions:
+          - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.ValidationException
+      fetch-future-events-retry:
+        max-attempts: 3
+        wait-duration: 5s
+        ignore-exceptions:
+          - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.ValidationException

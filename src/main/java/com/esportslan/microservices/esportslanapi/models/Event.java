@@ -10,6 +10,7 @@ import lombok.*;
 @ToString
 public class Event {
     private String name;
+    private String email;
     private String gameName;
     private Address address;
     private EventDetails eventDetails;
