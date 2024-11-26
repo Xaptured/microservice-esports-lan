@@ -27,10 +27,10 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionBody);
     }
 
-    @ExceptionHandler(FallBackException.class)
-    public ResponseEntity<ExceptionBody> handleFallbackException(FallBackException exception) {
-        LOGGER.error("Fallback exception occurred: " + exception.getMessage());
-        ExceptionBody exceptionBody = new ExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionBody);
+    @ExceptionHandler(BadRequestErrorException.class)
+    public ResponseEntity<ExceptionBody> handleBadRequestErrorException(BadRequestErrorException exception) {
+        LOGGER.error("Bad request exception occurred: " + exception.getMessage());
+        ExceptionBody exceptionBody = new ExceptionBody(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionBody);
     }
 }

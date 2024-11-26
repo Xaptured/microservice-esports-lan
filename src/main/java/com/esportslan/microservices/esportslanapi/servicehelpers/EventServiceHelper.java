@@ -16,6 +16,9 @@ public class EventServiceHelper {
     public void validateEvent(Event event) {
         LOGGER.info("Validating event object");
 
+        if (Utils.isStringEmptyOrBlank(event.getEmail())) {
+            throw new ValidationException("Email is invalid");
+        }
         if (Utils.isStringEmptyOrBlank(event.getName())) {
             throw new ValidationException("Event name is invalid");
         }
