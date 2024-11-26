@@ -31,4 +31,15 @@ public class EventController {
         List<Event> events = eventService.fetchFutureEventsWRTEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(events);
     }
+
+    @Operation(
+            summary = "Fetch past events with respect to email",
+            description = "Fetch past events with respect to email"
+    )
+    @GetMapping("/fetch-past-events/{email}")
+    @Retry(name = "fetch-past-events-retry")
+    public ResponseEntity<List<Event>> fetchPastEventsWRTEmail(@PathVariable String email) {
+        List<Event> events = eventService.fetchPastEventsWRTEmail(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
 }

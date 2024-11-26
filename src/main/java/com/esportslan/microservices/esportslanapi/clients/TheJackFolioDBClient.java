@@ -18,4 +18,7 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/future-events/{email}")
     public ResponseEntity<List<Event>> fetchFutureEventsWRTEmail(@PathVariable String email);
+
+    @GetMapping("/events-lan/past-events/{email}")
+    public ResponseEntity<List<Event>> fetchPastEventsWRTEmail(@PathVariable String email);
 }
