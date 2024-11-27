@@ -1,6 +1,7 @@
 package com.esportslan.microservices.esportslanapi.clients;
 
 import com.esportslan.microservices.esportslanapi.models.Event;
+import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,4 +22,7 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/past-events/{email}")
     public ResponseEntity<List<Event>> fetchPastEventsWRTEmail(@PathVariable String email);
+
+    @PostMapping("/events-lan/save-teams")
+    public ResponseEntity<Void> saveTeams(@RequestBody List<LANTeam> team);
 }

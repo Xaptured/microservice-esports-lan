@@ -4,6 +4,7 @@ import com.esportslan.microservices.esportslanapi.clients.TheJackFolioDBClient;
 import com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException;
 import com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException;
 import com.esportslan.microservices.esportslanapi.models.Event;
+import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,17 @@ public class TheJackFolioDBClientHelper {
             theJackFolioDBClient.saveOrUpdateEvent(event);
         } catch (InternalErrorException exception) {
             LOGGER.error("Got exception while saving lan event details");
-            throw new InternalErrorException("Got exception while saving lan event details", exception);
+            throw new InternalErrorException("Got exception while saving lan event details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void saveTeams(List<LANTeam> teams) {
+        try {
+            LOGGER.info("Calling database client to save teams");
+            theJackFolioDBClient.saveTeams(teams);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while saving team details");
+            throw new InternalErrorException("Got exception while saving team details: " + exception.getMessage(), exception);
         }
     }
 
