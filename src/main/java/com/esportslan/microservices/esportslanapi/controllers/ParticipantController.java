@@ -38,8 +38,19 @@ public class ParticipantController {
     )
     @PostMapping("/update-team-status")
     @Retry(name = "update-team-status-retry")
-    public ResponseEntity<Void> fetchTeamWithTeamMate(@RequestParam String email, @RequestParam String eventName, @RequestParam LANTeamStatus status) {
+    public ResponseEntity<Void> updateTeamStatus(@RequestParam String email, @RequestParam String eventName, @RequestParam LANTeamStatus status) {
         eventService.updateTeamStatus(email, eventName, status);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(
+            summary = "Fetch participant's past events",
+            description = "Fetch participant's past events"
+    )
+    @GetMapping("/participant-past-events/{email}")
+    @Retry(name = "participant-past-events-retry")
+    public ResponseEntity<List<Event>> fetchPastEventsForParticipants(@PathVariable String email) {
+        List<Event> events = eventService.fetchPastEventsForParticipants(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
     }
 }
