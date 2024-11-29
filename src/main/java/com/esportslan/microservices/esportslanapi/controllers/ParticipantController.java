@@ -1,5 +1,6 @@
 package com.esportslan.microservices.esportslanapi.controllers;
 
+import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import com.esportslan.microservices.esportslanapi.services.EventService;
@@ -9,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +30,16 @@ public class ParticipantController {
     public ResponseEntity<List<LANTeam>> fetchTeamWithTeamMate(@PathVariable String email) {
         List<LANTeam> events = eventService.fetchTeamWithTeamMate(email);
         return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
+    @Operation(
+            summary = "Update team status",
+            description = "Update team status"
+    )
+    @PostMapping("/update-team-status")
+    @Retry(name = "update-team-status-retry")
+    public ResponseEntity<Void> fetchTeamWithTeamMate(@RequestParam String email, @RequestParam String eventName, @RequestParam LANTeamStatus status) {
+        eventService.updateTeamStatus(email, eventName, status);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

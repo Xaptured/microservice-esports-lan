@@ -1,5 +1,6 @@
 package com.esportslan.microservices.esportslanapi.servicehelpers;
 
+import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
@@ -75,6 +76,18 @@ public class EventServiceHelper {
                     throw new ValidationException("Team mate email is invalid");
                 }
             }
+        }
+    }
+
+    public void validateTeamStatusUpdateParams(String email, String eventName, LANTeamStatus status) {
+        if (Utils.isStringEmptyOrBlank(eventName)) {
+            throw new ValidationException("Event name is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(status.toString())) {
+            throw new ValidationException("Status is invalid");
         }
     }
 }

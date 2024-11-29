@@ -1,6 +1,7 @@
 package com.esportslan.microservices.esportslanapi.services;
 
 import com.esportslan.microservices.esportslanapi.clienthelpers.TheJackFolioDBClientHelper;
+import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
@@ -48,5 +49,10 @@ public class EventService {
             throw new ValidationException("Email is invalid");
         }
         return theJackFolioDBClientHelper.fetchTeamWithTeamMate(email);
+    }
+
+    public void updateTeamStatus(String email, String eventName, LANTeamStatus status) {
+        eventServiceHelper.validateTeamStatusUpdateParams(email, eventName, status);
+        theJackFolioDBClientHelper.updateTeamStatus(email, eventName, status);
     }
 }
