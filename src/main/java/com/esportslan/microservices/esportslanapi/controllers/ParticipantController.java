@@ -38,7 +38,7 @@ public class ParticipantController {
     )
     @PostMapping("/update-team-status")
     @Retry(name = "update-team-status-retry")
-    public ResponseEntity<Void> fetchTeamWithTeamMate(@RequestParam String email, @RequestParam String eventName, @RequestParam LANTeamStatus status) {
+    public ResponseEntity<Void> updateTeamStatus(@RequestParam String email, @RequestParam String eventName, @RequestParam LANTeamStatus status) {
         eventService.updateTeamStatus(email, eventName, status);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
