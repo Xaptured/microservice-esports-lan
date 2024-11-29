@@ -1,6 +1,7 @@
 package com.esportslan.microservices.esportslanapi.clienthelpers;
 
 import com.esportslan.microservices.esportslanapi.clients.TheJackFolioDBClient;
+import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException;
 import com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException;
 import com.esportslan.microservices.esportslanapi.models.Event;
@@ -75,6 +76,19 @@ public class TheJackFolioDBClientHelper {
         } catch (InternalErrorException exception) {
             LOGGER.error("Got exception while getting pending teams");
             throw new InternalErrorException("Got exception while getting pending teams: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void updateTeamStatus(String email, String eventName, LANTeamStatus status) {
+        try {
+            LOGGER.info("Calling database client to update team status for email: {}", email);
+            theJackFolioDBClient.updateTeamStatus(email, eventName, status);
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while updating team status");
+            throw new BadRequestErrorException("Got exception while updating team status: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while getting pending teams");
+            throw new InternalErrorException("Got exception while updating team status: " + exception.getMessage(), exception);
         }
     }
 }

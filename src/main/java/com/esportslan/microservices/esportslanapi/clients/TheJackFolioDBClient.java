@@ -1,13 +1,11 @@
 package com.esportslan.microservices.esportslanapi.clients;
 
+import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,4 +26,7 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/pending-teams/{email}")
     public ResponseEntity<List<LANTeam>> fetchTeamWithTeamMate(@PathVariable String email);
+
+    @PostMapping("/events-lan/update-team-status")
+    public ResponseEntity<Void> updateTeamStatus(@RequestParam String email, @RequestParam String eventName, @RequestParam LANTeamStatus status);
 }
