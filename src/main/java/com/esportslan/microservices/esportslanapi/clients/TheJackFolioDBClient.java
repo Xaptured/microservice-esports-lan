@@ -32,4 +32,7 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/participant-past-events/{email}")
     public ResponseEntity<List<Event>> fetchPastEventsForParticipants(@PathVariable String email);
+
+    @GetMapping("/events-lan/participant-future-events/{email}")
+    public ResponseEntity<List<Event>> fetchFutureEventsForParticipants(@PathVariable String email);
 }

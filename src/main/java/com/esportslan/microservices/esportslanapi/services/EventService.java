@@ -62,4 +62,11 @@ public class EventService {
         }
         return theJackFolioDBClientHelper.fetchPastEventsForParticipants(email);
     }
+
+    public List<Event> fetchFutureEventsForParticipants(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchFutureEventsForParticipants(email);
+    }
 }
