@@ -27,8 +27,8 @@ public class OrganizerController {
     )
     @PostMapping("/save-update-event")
     @Retry(name = "save-or-update-event-retry")
-    public ResponseEntity<Event> saveOrUpdateEvent(@RequestBody Event event) {
-        eventService.saveOrUpdateEvent(event);
+    public ResponseEntity<Event> saveOrUpdateEvent(@RequestBody Event event, @RequestParam boolean isUpdate) {
+        eventService.saveOrUpdateEvent(event, isUpdate);
         return ResponseEntity.status(HttpStatus.CREATED).body(event);
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 public interface TheJackFolioDBClient {
 
     @PostMapping("/events-lan/save-or-update-event")
-    public ResponseEntity<Void> saveOrUpdateEvent(@RequestBody Event event);
+    public ResponseEntity<Void> saveOrUpdateEvent(@RequestBody Event event, @RequestParam boolean isUpdate);
 
     @GetMapping("/events-lan/future-events/{email}")
     public ResponseEntity<List<Event>> fetchFutureEventsWRTEmail(@PathVariable String email);
