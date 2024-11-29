@@ -64,4 +64,17 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while getting past lan event details: " + exception.getMessage(), exception);
         }
     }
+
+    public List<LANTeam> fetchTeamWithTeamMate(String email) {
+        try {
+            LOGGER.info("Calling database client to get list of pending teams for email: {}", email);
+            return theJackFolioDBClient.fetchTeamWithTeamMate(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while getting pending teams");
+            throw new BadRequestErrorException("Got exception while getting pending teams: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while getting pending teams");
+            throw new InternalErrorException("Got exception while getting pending teams: " + exception.getMessage(), exception);
+        }
+    }
 }

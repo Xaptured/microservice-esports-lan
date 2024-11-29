@@ -25,4 +25,7 @@ public interface TheJackFolioDBClient {
 
     @PostMapping("/events-lan/save-teams")
     public ResponseEntity<Void> saveTeams(@RequestBody List<LANTeam> team);
+
+    @GetMapping("/events-lan/pending-teams/{email}")
+    public ResponseEntity<List<LANTeam>> fetchTeamWithTeamMate(@PathVariable String email);
 }
