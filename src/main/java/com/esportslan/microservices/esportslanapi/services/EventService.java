@@ -20,9 +20,9 @@ public class EventService {
     @Autowired
     private TheJackFolioDBClientHelper theJackFolioDBClientHelper;
 
-    public void saveOrUpdateEvent(Event event) {
+    public void saveOrUpdateEvent(Event event, boolean isUpdate) {
         eventServiceHelper.validateEvent(event);
-        theJackFolioDBClientHelper.saveOrUpdateEvent(event);
+        theJackFolioDBClientHelper.saveOrUpdateEvent(event, isUpdate);
     }
 
     public void saveTeams(List<LANTeam> teams) {

@@ -20,10 +20,10 @@ public class TheJackFolioDBClientHelper {
     @Autowired
     private TheJackFolioDBClient theJackFolioDBClient;
 
-    public void saveOrUpdateEvent(Event event) {
+    public void saveOrUpdateEvent(Event event, boolean isUpdate) {
         try {
             LOGGER.info("Calling database client to save event");
-            theJackFolioDBClient.saveOrUpdateEvent(event);
+            theJackFolioDBClient.saveOrUpdateEvent(event, isUpdate);
         } catch (InternalErrorException exception) {
             LOGGER.error("Got exception while saving lan event details");
             throw new InternalErrorException("Got exception while saving lan event details: " + exception.getMessage(), exception);
