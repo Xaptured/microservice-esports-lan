@@ -55,4 +55,18 @@ public class EventService {
         eventServiceHelper.validateTeamStatusUpdateParams(email, eventName, status);
         theJackFolioDBClientHelper.updateTeamStatus(email, eventName, status);
     }
+
+    public List<Event> fetchPastEventsForParticipants(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchPastEventsForParticipants(email);
+    }
+
+    public List<Event> fetchFutureEventsForParticipants(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchFutureEventsForParticipants(email);
+    }
 }

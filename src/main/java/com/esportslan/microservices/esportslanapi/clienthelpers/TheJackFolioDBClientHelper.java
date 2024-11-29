@@ -91,4 +91,30 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while updating team status: " + exception.getMessage(), exception);
         }
     }
+
+    public List<Event> fetchPastEventsForParticipants(String email) {
+        try {
+            LOGGER.info("Calling database client to fetch past events for participant with an email: {}", email);
+            return theJackFolioDBClient.fetchPastEventsForParticipants(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching past events for participant");
+            throw new BadRequestErrorException("Got exception while fetching past events for participant: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching past events for participant");
+            throw new InternalErrorException("Got exception while fetching past events for participant: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Event> fetchFutureEventsForParticipants(String email) {
+        try {
+            LOGGER.info("Calling database client to fetch future events for participant with an email: {}", email);
+            return theJackFolioDBClient.fetchFutureEventsForParticipants(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching future events for participant");
+            throw new BadRequestErrorException("Got exception while fetching future events for participant: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching future events for participant");
+            throw new InternalErrorException("Got exception while fetching future events for participant: " + exception.getMessage(), exception);
+        }
+    }
 }

@@ -42,4 +42,26 @@ public class ParticipantController {
         eventService.updateTeamStatus(email, eventName, status);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @Operation(
+            summary = "Fetch participant's past events",
+            description = "Fetch participant's past events"
+    )
+    @GetMapping("/participant-past-events/{email}")
+    @Retry(name = "participant-past-events-retry")
+    public ResponseEntity<List<Event>> fetchPastEventsForParticipants(@PathVariable String email) {
+        List<Event> events = eventService.fetchPastEventsForParticipants(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
+    @Operation(
+            summary = "Fetch participant's future events",
+            description = "Fetch participant's future events"
+    )
+    @GetMapping("/participant-future-events/{email}")
+    @Retry(name = "participant-future-events-retry")
+    public ResponseEntity<List<Event>> fetchFutureEventsForParticipants(@PathVariable String email) {
+        List<Event> events = eventService.fetchFutureEventsForParticipants(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
 }

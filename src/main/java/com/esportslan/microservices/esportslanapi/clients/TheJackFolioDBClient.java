@@ -29,4 +29,10 @@ public interface TheJackFolioDBClient {
 
     @PostMapping("/events-lan/update-team-status")
     public ResponseEntity<Void> updateTeamStatus(@RequestParam String email, @RequestParam String eventName, @RequestParam LANTeamStatus status);
+
+    @GetMapping("/events-lan/participant-past-events/{email}")
+    public ResponseEntity<List<Event>> fetchPastEventsForParticipants(@PathVariable String email);
+
+    @GetMapping("/events-lan/participant-future-events/{email}")
+    public ResponseEntity<List<Event>> fetchFutureEventsForParticipants(@PathVariable String email);
 }
