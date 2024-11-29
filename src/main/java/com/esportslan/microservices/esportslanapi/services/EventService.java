@@ -42,4 +42,11 @@ public class EventService {
         }
         return theJackFolioDBClientHelper.fetchPastEventsWRTEmail(email);
     }
+
+    public List<LANTeam> fetchTeamWithTeamMate(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchTeamWithTeamMate(email);
+    }
 }

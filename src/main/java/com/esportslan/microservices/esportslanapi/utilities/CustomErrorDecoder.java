@@ -26,6 +26,8 @@ public class CustomErrorDecoder implements ErrorDecoder {
         switch (response.status()) {
             case 400:
                 return new BadRequestErrorException(exceptionBody != null ? exceptionBody.getMessage() : "Bad Request");
+            case 404:
+                return new BadRequestErrorException(exceptionBody != null ? exceptionBody.getMessage() : "Not Found");
             case 500:
                 return new InternalErrorException(exceptionBody != null ? exceptionBody.getMessage() : "Internal Error");
             default:
