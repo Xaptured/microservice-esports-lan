@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,5 +41,27 @@ public class OrganizerController {
     public ResponseEntity<List<LANTeam>> saveTeams(@RequestBody List<LANTeam> teams) {
         eventService.saveTeams(teams);
         return ResponseEntity.status(HttpStatus.CREATED).body(teams);
+    }
+
+    @Operation(
+            summary = "Fetch future events with respect to email",
+            description = "Fetch future events with respect to email"
+    )
+    @GetMapping("/fetch-future-events/{email}")
+    @Retry(name = "fetch-future-events-retry")
+    public ResponseEntity<List<Event>> fetchFutureEventsWRTEmail(@PathVariable String email) {
+        List<Event> events = eventService.fetchFutureEventsWRTEmail(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
+    @Operation(
+            summary = "Fetch past events with respect to email",
+            description = "Fetch past events with respect to email"
+    )
+    @GetMapping("/fetch-past-events/{email}")
+    @Retry(name = "fetch-past-events-retry")
+    public ResponseEntity<List<Event>> fetchPastEventsWRTEmail(@PathVariable String email) {
+        List<Event> events = eventService.fetchPastEventsWRTEmail(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
     }
 }
