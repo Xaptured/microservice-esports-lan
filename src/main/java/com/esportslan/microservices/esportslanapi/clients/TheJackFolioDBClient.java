@@ -1,6 +1,7 @@
 package com.esportslan.microservices.esportslanapi.clients;
 
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
+import com.esportslan.microservices.esportslanapi.models.Audience;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -35,4 +36,7 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/participant-future-events/{email}")
     public ResponseEntity<List<Event>> fetchFutureEventsForParticipants(@PathVariable String email);
+
+    @PostMapping("/events-lan/save-or-update-audience")
+    public ResponseEntity<Void> saveOrUpdateAudience(@RequestBody Audience audience);
 }

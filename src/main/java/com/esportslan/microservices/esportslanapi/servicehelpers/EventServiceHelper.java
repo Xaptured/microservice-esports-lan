@@ -2,6 +2,7 @@ package com.esportslan.microservices.esportslanapi.servicehelpers;
 
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
+import com.esportslan.microservices.esportslanapi.models.Audience;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import com.esportslan.microservices.esportslanapi.models.LANTeamMate;
@@ -88,6 +89,29 @@ public class EventServiceHelper {
         }
         if (Utils.isStringEmptyOrBlank(status.toString())) {
             throw new ValidationException("Status is invalid");
+        }
+    }
+
+    public void validateAudience(Audience audience) {
+        LOGGER.info("Validating audience object");
+
+        if (Utils.isStringEmptyOrBlank(audience.getEmail())) {
+            throw new ValidationException("Email is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(audience.getName())) {
+            throw new ValidationException("Name is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(audience.getTransactionId())) {
+            throw new ValidationException("Transaction id is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(audience.getEventName())) {
+            throw new ValidationException("Event name is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(audience.getStatus().toString())) {
+            throw new ValidationException("Status is invalid");
+        }
+        if (audience.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ValidationException("Amount is invalid");
         }
     }
 }

@@ -4,6 +4,7 @@ import com.esportslan.microservices.esportslanapi.clients.TheJackFolioDBClient;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException;
 import com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException;
+import com.esportslan.microservices.esportslanapi.models.Audience;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import org.slf4j.Logger;
@@ -115,6 +116,19 @@ public class TheJackFolioDBClientHelper {
         } catch (InternalErrorException exception) {
             LOGGER.error("Got exception while fetching future events for participant");
             throw new InternalErrorException("Got exception while fetching future events for participant: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void saveOrUpdateAudience(Audience audience) {
+        try {
+            LOGGER.info("Calling database client to save audience details with an email: {}", audience.getEmail());
+            theJackFolioDBClient.saveOrUpdateAudience(audience);
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while saving audience details");
+            throw new BadRequestErrorException("Got exception while saving audience details: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while saving audience details");
+            throw new InternalErrorException("Got exception while saving audience details: " + exception.getMessage(), exception);
         }
     }
 }
