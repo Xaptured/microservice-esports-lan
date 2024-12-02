@@ -111,4 +111,11 @@ public class EventService {
         }
         theJackFolioDBClientHelper.updateEventStatus(eventName, status);
     }
+
+    public Event fetchLANEventDetails(String eventName) {
+        if (Utils.isStringEmptyOrBlank(eventName)) {
+            throw new ValidationException("Event name is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchLANEventDetails(eventName);
+    }
 }

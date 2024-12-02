@@ -55,4 +55,7 @@ public interface TheJackFolioDBClient {
 
     @PostMapping("/events-lan/update-event-status")
     public ResponseEntity<Void> updateEventStatus(@RequestParam String eventName, @RequestParam EventStatus status);
+
+    @GetMapping("/events-lan/fetch-event-details/{eventName}")
+    public ResponseEntity<Event> fetchLANEventDetails(@PathVariable String eventName);
 }
