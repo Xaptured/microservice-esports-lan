@@ -97,3 +97,10 @@ resilience4j:
           - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
           - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
           - com.esportslan.microservices.esportslanapi.exceptions.ValidationException
+      update-event-status-retry:
+        max-attempts: 3
+        wait-duration: 5s
+        ignore-exceptions:
+          - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.ValidationException
