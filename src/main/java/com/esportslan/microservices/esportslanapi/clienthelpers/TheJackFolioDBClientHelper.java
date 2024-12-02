@@ -197,4 +197,17 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while updating event status: " + exception.getMessage(), exception);
         }
     }
+
+    public Event fetchLANEventDetails(String eventName) {
+        try {
+            LOGGER.info("Calling database client to fetch event details for event name: {}", eventName);
+            return theJackFolioDBClient.fetchLANEventDetails(eventName).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching event details");
+            throw new BadRequestErrorException("Got exception while fetching event details: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching event details");
+            throw new InternalErrorException("Got exception while fetching event details: " + exception.getMessage(), exception);
+        }
+    }
 }
