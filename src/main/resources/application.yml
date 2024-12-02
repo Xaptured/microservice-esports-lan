@@ -69,3 +69,24 @@ resilience4j:
           - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
           - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
           - com.esportslan.microservices.esportslanapi.exceptions.ValidationException
+      audience-past-events-retry:
+        max-attempts: 3
+        wait-duration: 5s
+        ignore-exceptions:
+          - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.ValidationException
+      audience-future-events-retry:
+        max-attempts: 3
+        wait-duration: 5s
+        ignore-exceptions:
+          - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.ValidationException
+      audience-live-events-retry:
+        max-attempts: 3
+        wait-duration: 5s
+        ignore-exceptions:
+          - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.ValidationException

@@ -131,4 +131,43 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while saving audience details: " + exception.getMessage(), exception);
         }
     }
+
+    public List<Event> fetchPastEventsForAudience(String email) {
+        try {
+            LOGGER.info("Calling database client to fetch past events for audience with an email: {}", email);
+            return theJackFolioDBClient.fetchPastEventsForAudience(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching past events for audience");
+            throw new BadRequestErrorException("Got exception while fetching past events for participant: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching past events for audience");
+            throw new InternalErrorException("Got exception while fetching past events for participant: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Event> fetchFutureEventsForAudience(String email) {
+        try {
+            LOGGER.info("Calling database client to fetch future events for audience with an email: {}", email);
+            return theJackFolioDBClient.fetchFutureEventsForAudience(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching future events for audience");
+            throw new BadRequestErrorException("Got exception while fetching future events for audience: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching future events for audience");
+            throw new InternalErrorException("Got exception while fetching future events for audience: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Event> fetchLiveEventsForAudience(String email) {
+        try {
+            LOGGER.info("Calling database client to fetch live events for audience with an email: {}", email);
+            return theJackFolioDBClient.fetchLiveEventsForAudience(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching live events for audience");
+            throw new BadRequestErrorException("Got exception while fetching live events for audience: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching live events for audience");
+            throw new InternalErrorException("Got exception while fetching live events for audience: " + exception.getMessage(), exception);
+        }
+    }
 }

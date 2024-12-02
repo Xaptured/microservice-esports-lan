@@ -39,4 +39,13 @@ public interface TheJackFolioDBClient {
 
     @PostMapping("/events-lan/save-or-update-audience")
     public ResponseEntity<Void> saveOrUpdateAudience(@RequestBody Audience audience);
+
+    @GetMapping("/events-lan/audience-past-events/{email}")
+    public ResponseEntity<List<Event>> fetchPastEventsForAudience(@PathVariable String email);
+
+    @GetMapping("/events-lan/audience-future-events/{email}")
+    public ResponseEntity<List<Event>> fetchFutureEventsForAudience(@PathVariable String email);
+
+    @GetMapping("/events-lan/audience-live-events/{email}")
+    public ResponseEntity<List<Event>> fetchLiveEventsForAudience(@PathVariable String email);
 }
