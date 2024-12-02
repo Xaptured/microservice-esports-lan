@@ -170,4 +170,17 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while fetching live events for audience: " + exception.getMessage(), exception);
         }
     }
+
+    public List<Event> fetchInactiveEventForAdmin() {
+        try {
+            LOGGER.info("Calling database client to fetch inactive events for admin");
+            return theJackFolioDBClient.fetchInactiveEventForAdmin().getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching inactive events for admin");
+            throw new BadRequestErrorException("Got exception while fetching inactive events for admin: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching inactive events for admin");
+            throw new InternalErrorException("Got exception while fetching inactive events for admin: " + exception.getMessage(), exception);
+        }
+    }
 }

@@ -96,4 +96,8 @@ public class EventService {
         }
         return theJackFolioDBClientHelper.fetchLiveEventsForAudience(email);
     }
+
+    public List<Event> fetchInactiveEventForAdmin() {
+        return theJackFolioDBClientHelper.fetchInactiveEventForAdmin();
+    }
 }
