@@ -210,4 +210,17 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while fetching event details: " + exception.getMessage(), exception);
         }
     }
+
+    public List<LANTeam> fetchParticipatedTeamDetails(String eventName) {
+        try {
+            LOGGER.info("Calling database client to fetch team details for event name: {}", eventName);
+            return theJackFolioDBClient.fetchParticipatedTeamDetails(eventName).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching team details");
+            throw new BadRequestErrorException("Got exception while fetching team details: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching team details");
+            throw new InternalErrorException("Got exception while fetching team details: " + exception.getMessage(), exception);
+        }
+    }
 }
