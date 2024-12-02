@@ -75,4 +75,25 @@ public class EventService {
         eventServiceHelper.validateAudience(audience);
         theJackFolioDBClientHelper.saveOrUpdateAudience(audience);
     }
+
+    public List<Event> fetchPastEventsForAudience(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchPastEventsForAudience(email);
+    }
+
+    public List<Event> fetchFutureEventsForAudience(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchFutureEventsForAudience(email);
+    }
+
+    public List<Event> fetchLiveEventsForAudience(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchLiveEventsForAudience(email);
+    }
 }

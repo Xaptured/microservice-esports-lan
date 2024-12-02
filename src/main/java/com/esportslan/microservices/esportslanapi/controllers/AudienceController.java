@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "Audience", description = "Event management APIs for audience")
 @RestController
 @RequestMapping("/audience")
@@ -28,5 +30,38 @@ public class AudienceController {
     public ResponseEntity<Audience> saveOrUpdateAudience(@RequestBody Audience audience) {
         eventService.saveOrUpdateAudience(audience);
         return ResponseEntity.status(HttpStatus.CREATED).body(audience);
+    }
+
+    @Operation(
+            summary = "Fetch audience's past events",
+            description = "Fetch audience's past events"
+    )
+    @GetMapping("/audience-past-events/{email}")
+    @Retry(name = "audience-past-events-retry")
+    public ResponseEntity<List<Event>> fetchPastEventsForAudience(@PathVariable String email) {
+        List<Event> events = eventService.fetchPastEventsForAudience(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
+    @Operation(
+            summary = "Fetch audience's future events",
+            description = "Fetch audience's future events"
+    )
+    @GetMapping("/audience-future-events/{email}")
+    @Retry(name = "audience-future-events-retry")
+    public ResponseEntity<List<Event>> fetchFutureEventsForAudience(@PathVariable String email) {
+        List<Event> events = eventService.fetchFutureEventsForAudience(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
+    @Operation(
+            summary = "Fetch audience's live events",
+            description = "Fetch audience's live events"
+    )
+    @GetMapping("/audience-live-events/{email}")
+    @Retry(name = "audience-live-events-retry")
+    public ResponseEntity<List<Event>> fetchLiveEventsForAudience(@PathVariable String email) {
+        List<Event> events = eventService.fetchLiveEventsForAudience(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
     }
 }
