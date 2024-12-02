@@ -58,4 +58,7 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/fetch-event-details/{eventName}")
     public ResponseEntity<Event> fetchLANEventDetails(@PathVariable String eventName);
+
+    @GetMapping("/events-lan/fetch-team-details/{eventName}")
+    public ResponseEntity<List<LANTeam>> fetchParticipatedTeamDetails(@PathVariable String eventName);
 }

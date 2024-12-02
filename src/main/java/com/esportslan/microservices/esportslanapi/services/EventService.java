@@ -118,4 +118,11 @@ public class EventService {
         }
         return theJackFolioDBClientHelper.fetchLANEventDetails(eventName);
     }
+
+    public List<LANTeam> fetchParticipatedTeamDetails(String eventName) {
+        if (Utils.isStringEmptyOrBlank(eventName)) {
+            throw new ValidationException("Event name is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchParticipatedTeamDetails(eventName);
+    }
 }
