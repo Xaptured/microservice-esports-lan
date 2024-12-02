@@ -1,6 +1,7 @@
 package com.esportslan.microservices.esportslanapi.clienthelpers;
 
 import com.esportslan.microservices.esportslanapi.clients.TheJackFolioDBClient;
+import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException;
 import com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException;
@@ -88,7 +89,7 @@ public class TheJackFolioDBClientHelper {
             LOGGER.error("Got exception while updating team status");
             throw new BadRequestErrorException("Got exception while updating team status: " + exception.getMessage(), exception);
         } catch (InternalErrorException exception) {
-            LOGGER.error("Got exception while getting pending teams");
+            LOGGER.error("Got exception while updating team status");
             throw new InternalErrorException("Got exception while updating team status: " + exception.getMessage(), exception);
         }
     }
@@ -181,6 +182,19 @@ public class TheJackFolioDBClientHelper {
         } catch (InternalErrorException exception) {
             LOGGER.error("Got exception while fetching inactive events for admin");
             throw new InternalErrorException("Got exception while fetching inactive events for admin: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void updateEventStatus(String eventName, EventStatus status) {
+        try {
+            LOGGER.info("Calling database client to update event status for event name: {}", eventName);
+            theJackFolioDBClient.updateEventStatus(eventName, status);
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while updating event status");
+            throw new BadRequestErrorException("Got exception while updating event status: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while updating event status");
+            throw new InternalErrorException("Got exception while updating event status: " + exception.getMessage(), exception);
         }
     }
 }

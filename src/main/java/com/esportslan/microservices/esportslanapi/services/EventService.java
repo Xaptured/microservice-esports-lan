@@ -1,6 +1,7 @@
 package com.esportslan.microservices.esportslanapi.services;
 
 import com.esportslan.microservices.esportslanapi.clienthelpers.TheJackFolioDBClientHelper;
+import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
 import com.esportslan.microservices.esportslanapi.models.Audience;
@@ -99,5 +100,15 @@ public class EventService {
 
     public List<Event> fetchInactiveEventForAdmin() {
         return theJackFolioDBClientHelper.fetchInactiveEventForAdmin();
+    }
+
+    public void updateEventStatus(String eventName, EventStatus status) {
+        if (Utils.isStringEmptyOrBlank(eventName)) {
+            throw new ValidationException("Event name is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(status.toString())) {
+            throw new ValidationException("Status is invalid");
+        }
+        theJackFolioDBClientHelper.updateEventStatus(eventName, status);
     }
 }

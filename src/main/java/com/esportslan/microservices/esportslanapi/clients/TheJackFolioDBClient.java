@@ -1,5 +1,6 @@
 package com.esportslan.microservices.esportslanapi.clients;
 
+import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.models.Audience;
 import com.esportslan.microservices.esportslanapi.models.Event;
@@ -51,4 +52,7 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/admin-inactive-events")
     public ResponseEntity<List<Event>> fetchInactiveEventForAdmin();
+
+    @PostMapping("/events-lan/update-event-status")
+    public ResponseEntity<Void> updateEventStatus(@RequestParam String eventName, @RequestParam EventStatus status);
 }

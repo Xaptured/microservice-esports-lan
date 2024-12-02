@@ -1,5 +1,7 @@
 package com.esportslan.microservices.esportslanapi.controllers;
 
+import com.esportslan.microservices.esportslanapi.enums.EventStatus;
+import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.services.EventService;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -8,9 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +31,16 @@ public class AdminController {
     public ResponseEntity<List<Event>> fetchInactiveEventForAdmin() {
         List<Event> events = eventService.fetchInactiveEventForAdmin();
         return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
+    @Operation(
+            summary = "Update event status",
+            description = "Update event status"
+    )
+    @PostMapping("/update-event-status")
+    @Retry(name = "update-event-status-retry")
+    public ResponseEntity<Void> updateEventStatus(@RequestParam String eventName, @RequestParam EventStatus status) {
+        eventService.updateEventStatus(eventName, status);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
