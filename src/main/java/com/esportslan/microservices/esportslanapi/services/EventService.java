@@ -3,6 +3,7 @@ package com.esportslan.microservices.esportslanapi.services;
 import com.esportslan.microservices.esportslanapi.clienthelpers.TheJackFolioDBClientHelper;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
+import com.esportslan.microservices.esportslanapi.models.Audience;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import com.esportslan.microservices.esportslanapi.servicehelpers.EventServiceHelper;
@@ -68,5 +69,10 @@ public class EventService {
             throw new ValidationException("Email is invalid");
         }
         return theJackFolioDBClientHelper.fetchFutureEventsForParticipants(email);
+    }
+
+    public void saveOrUpdateAudience(Audience audience) {
+        eventServiceHelper.validateAudience(audience);
+        theJackFolioDBClientHelper.saveOrUpdateAudience(audience);
     }
 }
