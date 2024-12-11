@@ -50,6 +50,9 @@ public interface TheJackFolioDBClient {
     @GetMapping("/events-lan/audience-live-events/{email}")
     public ResponseEntity<List<Event>> fetchLiveEventsForAudience(@PathVariable String email);
 
+    @GetMapping("/events-lan/audience-unregistered-events/{email}")
+    public ResponseEntity<List<Event>> findLANEventsNotRegisteredByAudience(@PathVariable String email);
+
     @GetMapping("/events-lan/admin-inactive-events")
     public ResponseEntity<List<Event>> fetchInactiveEventForAdmin();
 

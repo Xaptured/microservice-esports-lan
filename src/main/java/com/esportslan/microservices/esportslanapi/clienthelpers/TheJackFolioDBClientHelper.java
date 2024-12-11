@@ -172,6 +172,19 @@ public class TheJackFolioDBClientHelper {
         }
     }
 
+    public List<Event> findLANEventsNotRegisteredByAudience(String email) {
+        try {
+            LOGGER.info("Calling database client to fetch unregistered events for audience with an email: {}", email);
+            return theJackFolioDBClient.findLANEventsNotRegisteredByAudience(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching unregistered events for audience");
+            throw new BadRequestErrorException("Got exception while fetching unregistered events for audience: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching unregistered events for audience");
+            throw new InternalErrorException("Got exception while fetching unregistered events for audience: " + exception.getMessage(), exception);
+        }
+    }
+
     public List<Event> fetchInactiveEventForAdmin() {
         try {
             LOGGER.info("Calling database client to fetch inactive events for admin");

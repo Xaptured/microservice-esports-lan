@@ -98,6 +98,13 @@ public class EventService {
         return theJackFolioDBClientHelper.fetchLiveEventsForAudience(email);
     }
 
+    public List<Event> findLANEventsNotRegisteredByAudience(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.findLANEventsNotRegisteredByAudience(email);
+    }
+
     public List<Event> fetchInactiveEventForAdmin() {
         return theJackFolioDBClientHelper.fetchInactiveEventForAdmin();
     }
