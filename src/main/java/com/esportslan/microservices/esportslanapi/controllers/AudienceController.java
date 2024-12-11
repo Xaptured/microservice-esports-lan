@@ -64,4 +64,15 @@ public class AudienceController {
         List<Event> events = eventService.fetchLiveEventsForAudience(email);
         return ResponseEntity.status(HttpStatus.OK).body(events);
     }
+
+    @Operation(
+            summary = "Fetch audience's unregistered events",
+            description = "Fetch audience's unregistered events"
+    )
+    @GetMapping("/audience-unregistered-events/{email}")
+    @Retry(name = "audience-unregistered-events-retry")
+    public ResponseEntity<List<Event>> findLANEventsNotRegisteredByAudience(@PathVariable String email) {
+        List<Event> events = eventService.findLANEventsNotRegisteredByAudience(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
 }
