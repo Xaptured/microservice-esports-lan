@@ -1,6 +1,7 @@
 package com.esportslan.microservices.esportslanapi.exceptions;
 
 import com.esportslan.microservices.esportslanapi.models.ExceptionBody;
+import com.phonepe.sdk.pg.common.http.PhonePeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,5 +33,19 @@ public class ExceptionHandlerAdvice {
         LOGGER.error("Bad request exception occurred: " + exception.getMessage());
         ExceptionBody exceptionBody = new ExceptionBody(HttpStatus.BAD_REQUEST, exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionBody);
+    }
+
+    @ExceptionHandler(SchedulingException.class)
+    public ResponseEntity<ExceptionBody> handleScheduleErrorException(SchedulingException exception) {
+        LOGGER.error("Schedule exception occurred: " + exception.getMessage());
+        ExceptionBody exceptionBody = new ExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionBody);
+    }
+
+    @ExceptionHandler(PhonePeException.class)
+    public ResponseEntity<ExceptionBody> handlePhonePeErrorException(PhonePeException exception) {
+        LOGGER.error("PhonePe exception occurred: " + exception.getMessage());
+        ExceptionBody exceptionBody = new ExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionBody);
     }
 }

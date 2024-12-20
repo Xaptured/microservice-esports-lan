@@ -3,8 +3,10 @@ package com.esportslan.microservices.esportslanapi.services;
 import com.esportslan.microservices.esportslanapi.clienthelpers.TheJackFolioDBClientHelper;
 import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
+import com.esportslan.microservices.esportslanapi.enums.PaymentStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
 import com.esportslan.microservices.esportslanapi.models.Audience;
+import com.esportslan.microservices.esportslanapi.models.AudienceTicket;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import com.esportslan.microservices.esportslanapi.servicehelpers.EventServiceHelper;
@@ -75,6 +77,11 @@ public class EventService {
     public void saveOrUpdateAudience(Audience audience) {
         eventServiceHelper.validateAudience(audience);
         theJackFolioDBClientHelper.saveOrUpdateAudience(audience);
+        if (audience.getStatus().equals(PaymentStatus.COMPLETED)) {
+            String ticketNumber = audience.getEventName() + "-" + Utils.generateUUID();
+            AudienceTicket audienceTicket = new AudienceTicket(audience.getEmail(), audience.getEventName(), ticketNumber, false);
+            theJackFolioDBClientHelper.saveAudienceTicket(audienceTicket);
+        }
     }
 
     public List<Event> fetchPastEventsForAudience(String email) {
@@ -131,5 +138,45 @@ public class EventService {
             throw new ValidationException("Event name is invalid");
         }
         return theJackFolioDBClientHelper.fetchParticipatedTeamDetails(eventName);
+    }
+
+    public long fetchUnsentEmailForAudienceCount() {
+        return theJackFolioDBClientHelper.fetchUnsentEmailForAudienceCount();
+    }
+
+    public List<AudienceTicket> fetchUnsentEmailForAudience() {
+        return theJackFolioDBClientHelper.fetchUnsentEmailForAudience();
+    }
+
+    public void savePendingPayment(Audience audience) {
+        theJackFolioDBClientHelper.savePendingPayments(audience);
+    }
+
+    public void saveFailedPayment(Audience audience) {
+        theJackFolioDBClientHelper.saveFailedPayments(audience);
+    }
+
+    public void saveInitiatePayment(Audience audience) {
+        theJackFolioDBClientHelper.saveInitiatePayment(audience);
+    }
+
+    public List<Audience> fetchAllPendingPayments() {
+        return theJackFolioDBClientHelper.fetchPendingPayments();
+    }
+
+    public List<Audience> fetchAllFailedPayments() {
+        return theJackFolioDBClientHelper.fetchFailedPayments();
+    }
+
+    public Audience fetchInitiatePayment(String merchantTransactionId) {
+        return theJackFolioDBClientHelper.fetchInitiatePayment(merchantTransactionId);
+    }
+
+    public void deletePendingPayment(String email, String eventName) {
+        theJackFolioDBClientHelper.deletePendingPayment(email, eventName);
+    }
+
+    public void deleteFailedPayment(String email, String eventName) {
+        theJackFolioDBClientHelper.deleteFailedPayment(email, eventName);
     }
 }

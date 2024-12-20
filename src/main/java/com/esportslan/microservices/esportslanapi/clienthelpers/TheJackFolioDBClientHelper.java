@@ -6,6 +6,7 @@ import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException;
 import com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException;
 import com.esportslan.microservices.esportslanapi.models.Audience;
+import com.esportslan.microservices.esportslanapi.models.AudienceTicket;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import org.slf4j.Logger;
@@ -234,6 +235,138 @@ public class TheJackFolioDBClientHelper {
         } catch (InternalErrorException exception) {
             LOGGER.error("Got exception while fetching team details");
             throw new InternalErrorException("Got exception while fetching team details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void saveAudienceTicket(AudienceTicket audienceTicket) {
+        try {
+            LOGGER.info("Calling database client to save audience ticket details with an email: {}", audienceTicket.getEmail());
+            theJackFolioDBClient.saveAudienceTicket(audienceTicket);
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while saving audience ticket details");
+            throw new BadRequestErrorException("Got exception while saving audience ticket details: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while saving audience ticket details");
+            throw new InternalErrorException("Got exception while saving audience ticket details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public long fetchUnsentEmailForAudienceCount() {
+        try {
+            LOGGER.info("Calling database client to fetch count of unsent emails");
+            return theJackFolioDBClient.fetchUnsentEmailForAudienceCount().getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching count of unsent emails");
+            throw new BadRequestErrorException("Got exception while fetching count of unsent emails: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching count of unsent emails");
+            throw new InternalErrorException("Got exception while fetching count of unsent emails: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<AudienceTicket> fetchUnsentEmailForAudience() {
+        try {
+            LOGGER.info("Calling database client to fetch unsent emails for audience");
+            return theJackFolioDBClient.fetchUnsentEmailForAudience().getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching unsent emails for audience");
+            throw new BadRequestErrorException("Got exception while fetching unsent emails for audience: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching unsent emails for audience");
+            throw new InternalErrorException("Got exception while fetching unsent emails for audience: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void updateAudienceTicketStatus(AudienceTicket audienceTicket) {
+        try {
+            LOGGER.info("Calling database client to update booking ticket status");
+            theJackFolioDBClient.updateAudienceTicketStatus(audienceTicket);
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while updating booking ticket status");
+            throw new BadRequestErrorException("Got exception while updating booking ticket status: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while updating booking ticket status");
+            throw new InternalErrorException("Got exception while updating booking ticket status: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void savePendingPayments(Audience audience) {
+        try {
+            LOGGER.info("Calling database client to save audience pending payment");
+            theJackFolioDBClient.savePendingPayments(audience);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while saving audience pending payment details");
+            throw new InternalErrorException("Got exception while saving audience pending payment details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void saveFailedPayments(Audience audience) {
+        try {
+            LOGGER.info("Calling database client to save audience failed payment");
+            theJackFolioDBClient.saveFailedPayments(audience);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while saving audience failed payment details");
+            throw new InternalErrorException("Got exception while saving audience failed payment details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void saveInitiatePayment(Audience audience) {
+        try {
+            LOGGER.info("Calling database client to save audience initiated payment");
+            theJackFolioDBClient.saveInitiatePayment(audience);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while saving audience initiated payment details");
+            throw new InternalErrorException("Got exception while saving audience initiated payment details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Audience> fetchPendingPayments() {
+        try {
+            LOGGER.info("Calling database client to fetch all audience pending payment");
+            return theJackFolioDBClient.fetchPendingPayments().getBody();
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching all audience pending payment");
+            throw new InternalErrorException("Got exception while fetching all audience pending payment: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Audience> fetchFailedPayments() {
+        try {
+            LOGGER.info("Calling database client to fetch all audience failed payment");
+            return theJackFolioDBClient.fetchFailedPayments().getBody();
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching all audience failed payment");
+            throw new InternalErrorException("Got exception while fetching all audience failed payment: " + exception.getMessage(), exception);
+        }
+    }
+
+    public Audience fetchInitiatePayment(String merchantTransactionId) {
+        try {
+            LOGGER.info("Calling database client to fetch audience initiated payment");
+            return theJackFolioDBClient.fetchInitiatePayment(merchantTransactionId).getBody();
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching audience initiated payment");
+            throw new InternalErrorException("Got exception while fetching audience initiated payment: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void deletePendingPayment(String email, String eventName) {
+        try {
+            LOGGER.info("Calling database client to delete pending payment");
+            theJackFolioDBClient.deletePendingPayment(email, eventName);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while deleting pending payment");
+            throw new InternalErrorException("Got exception while deleting pending payment: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void deleteFailedPayment(String email, String eventName) {
+        try {
+            LOGGER.info("Calling database client to delete failed payment");
+            theJackFolioDBClient.deleteFailedPayment(email, eventName);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while deleting failed payment");
+            throw new InternalErrorException("Got exception while deleting failed payment: " + exception.getMessage(), exception);
         }
     }
 }

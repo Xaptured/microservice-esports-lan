@@ -101,8 +101,8 @@ public class EventServiceHelper {
         if (Utils.isStringEmptyOrBlank(audience.getName())) {
             throw new ValidationException("Name is invalid");
         }
-        if (Utils.isStringEmptyOrBlank(audience.getTransactionId())) {
-            throw new ValidationException("Transaction id is invalid");
+        if (Utils.isStringEmptyOrBlank(audience.getMerchantTransactionId())) {
+            throw new ValidationException("Merchant transaction id is invalid");
         }
         if (Utils.isStringEmptyOrBlank(audience.getEventName())) {
             throw new ValidationException("Event name is invalid");
