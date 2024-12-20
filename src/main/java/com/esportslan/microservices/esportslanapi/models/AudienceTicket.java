@@ -6,22 +6,16 @@
 
 package com.esportslan.microservices.esportslanapi.models;
 
-import com.esportslan.microservices.esportslanapi.enums.PaymentStatus;
 import lombok.*;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Audience {
-    private String name;
+public class AudienceTicket {
     private String email;
-    private BigDecimal amount;
-    private String transactionId;
-    private String merchantTransactionId;
-    private PaymentStatus status;
     private String eventName;
+    private String ticketNumber;
+    private boolean emailSent;
 }

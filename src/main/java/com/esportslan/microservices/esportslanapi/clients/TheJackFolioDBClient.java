@@ -3,6 +3,7 @@ package com.esportslan.microservices.esportslanapi.clients;
 import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.models.Audience;
+import com.esportslan.microservices.esportslanapi.models.AudienceTicket;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -64,4 +65,40 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/fetch-team-details/{eventName}")
     public ResponseEntity<List<LANTeam>> fetchParticipatedTeamDetails(@PathVariable String eventName);
+
+    @PostMapping("/events-lan/save-audience-ticket")
+    public ResponseEntity<Void> saveAudienceTicket(@RequestBody AudienceTicket audienceTicket);
+
+    @GetMapping("/events-lan/fetch-unsent-email-count")
+    public ResponseEntity<Long> fetchUnsentEmailForAudienceCount();
+
+    @GetMapping("/events-lan/fetch-unsent-emails")
+    public ResponseEntity<List<AudienceTicket>> fetchUnsentEmailForAudience();
+
+    @PostMapping("/events-lan/update-audience-ticket-status")
+    public ResponseEntity<Void> updateAudienceTicketStatus(@RequestBody AudienceTicket audienceTicket);
+
+    @PostMapping("/events-lan/save-pending-payments")
+    public ResponseEntity<Void> savePendingPayments(@RequestBody Audience audience);
+
+    @PostMapping("/events-lan/save-failed-payments")
+    public ResponseEntity<Void> saveFailedPayments(@RequestBody Audience audience);
+
+    @GetMapping("/events-lan/fetch-pending-payments")
+    public ResponseEntity<List<Audience>> fetchPendingPayments();
+
+    @GetMapping("/events-lan/fetch-failed-payments")
+    public ResponseEntity<List<Audience>> fetchFailedPayments();
+
+    @DeleteMapping("/events-lan/delete-pending-payment")
+    public ResponseEntity<Void> deletePendingPayment(@RequestParam String email, @RequestParam String eventName);
+
+    @DeleteMapping("/events-lan/delete-failed-payment")
+    public ResponseEntity<Void> deleteFailedPayment(@RequestParam String email, @RequestParam String eventName);
+
+    @PostMapping("/events-lan/save-initiated-payment")
+    public ResponseEntity<Void> saveInitiatePayment(@RequestBody Audience audience);
+
+    @GetMapping("/events-lan/fetch-initiate-payment")
+    public ResponseEntity<Audience> fetchInitiatePayment(@RequestParam String merchantTransactionId);
 }

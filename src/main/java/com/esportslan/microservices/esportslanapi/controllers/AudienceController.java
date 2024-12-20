@@ -1,6 +1,7 @@
 package com.esportslan.microservices.esportslanapi.controllers;
 
 import com.esportslan.microservices.esportslanapi.models.Audience;
+import com.esportslan.microservices.esportslanapi.models.AudienceTicket;
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.services.EventService;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -74,5 +75,27 @@ public class AudienceController {
     public ResponseEntity<List<Event>> findLANEventsNotRegisteredByAudience(@PathVariable String email) {
         List<Event> events = eventService.findLANEventsNotRegisteredByAudience(email);
         return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
+    @Operation(
+            summary = "Fetch unsent email count for audience",
+            description = "Fetch unsent email count for audience"
+    )
+    @GetMapping("/unsent-email-count-for-audience")
+    @Retry(name = "unsent-email-count-for-audience-retry")
+    public ResponseEntity<Long> fetchUnsentEmailForAudienceCount() {
+        long count = eventService.fetchUnsentEmailForAudienceCount();
+        return ResponseEntity.status(HttpStatus.OK).body(count);
+    }
+
+    @Operation(
+            summary = "Fetch unsent emails for audience",
+            description = "Fetch unsent emails for audience"
+    )
+    @GetMapping("/unsent-emails-for-audience")
+    @Retry(name = "unsent-emails-for-audience-retry")
+    public ResponseEntity<List<AudienceTicket>> fetchUnsentEmailForAudience() {
+        List<AudienceTicket> audienceTickets = eventService.fetchUnsentEmailForAudience();
+        return ResponseEntity.status(HttpStatus.OK).body(audienceTickets);
     }
 }

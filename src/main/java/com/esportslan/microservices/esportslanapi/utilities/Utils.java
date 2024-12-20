@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 public class Utils {
@@ -29,5 +30,11 @@ public class Utils {
         LocalDate today = LocalDate.now();
 
         return localDate.isAfter(today);
+    }
+
+    public static String generateUUID() {
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String shortUUID = uuid.substring(0, 5);
+        return shortUUID;
     }
 }
