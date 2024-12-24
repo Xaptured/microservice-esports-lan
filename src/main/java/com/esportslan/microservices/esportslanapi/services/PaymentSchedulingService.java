@@ -33,8 +33,10 @@ public class PaymentSchedulingService {
                         = phonePeService.checkStatus(pendingAudience.getMerchantTransactionId());
 
                 if (PaymentStatus.COMPLETED.toString().equals(statusResponse.getData().getState())) {
-                    pendingAudience.setStatus(PaymentStatus.COMPLETED);
-                    eventService.saveOrUpdateAudience(pendingAudience);
+                    if (!pendingAudience.isRefund()) {
+                        pendingAudience.setStatus(PaymentStatus.COMPLETED);
+                        eventService.saveOrUpdateAudience(pendingAudience);
+                    }
                     eventService.deletePendingPayment(pendingAudience.getEmail(), pendingAudience.getEventName());
                     LOGGER.info("PaymentScheduling: Pending audience is completed for event: {} with email: {} and transactionId: {}", pendingAudience.getEventName(), pendingAudience.getEmail(), pendingAudience.getMerchantTransactionId());
                 } else if (statusResponse.getCode().equals("INTERNAL_SERVER_ERROR") || PaymentStatus.PENDING.toString().equals(statusResponse.getData().getState())) {
@@ -62,6 +64,7 @@ public class PaymentSchedulingService {
                     eventService.deleteFailedPayment(failedAudience.getEmail(), failedAudience.getEventName());
                 } else if (PaymentStatus.PENDING.toString().equals(state)) {
                     LOGGER.info("PaymentScheduling: Failed audience refund in pending for event: {} with email: {} and transactionId: {}", failedAudience.getEventName(), failedAudience.getEmail(), failedAudience.getMerchantTransactionId());
+                    failedAudience.setRefund(true);
                     eventService.savePendingPayment(failedAudience);
                     eventService.deleteFailedPayment(failedAudience.getEmail(), failedAudience.getEventName());
                 } else {
