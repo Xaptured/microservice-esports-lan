@@ -24,4 +24,5 @@ public class Audience {
     private String merchantTransactionId;
     private PaymentStatus status;
     private String eventName;
+    private boolean isRefund;
 }

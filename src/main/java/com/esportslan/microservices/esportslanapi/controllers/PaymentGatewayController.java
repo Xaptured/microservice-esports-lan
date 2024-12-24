@@ -12,10 +12,12 @@ import com.phonepe.sdk.pg.payments.v1.models.response.PgTransactionStatusRespons
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Map;
 
 @Tag(name = "PaymentGateway", description = "Event management APIs for payment gateway")
@@ -42,33 +44,45 @@ public class PaymentGatewayController {
             description = "Check payment status"
     )
     @PostMapping("/check-status")
-    public ResponseEntity<PaymentStatusResponse> checkStatus(@RequestParam Map<String, String> request) {
+    public ResponseEntity<Void> checkStatus(@RequestParam Map<String, String> request) {
         PhonePeResponse<PgTransactionStatusResponse> statusResponse = phonePeService.checkStatus(request.get("transactionId"));
         Audience audience = eventService.fetchInitiatePayment(request.get("transactionId"));
 
         if (statusResponse.getCode().equals("BAD_REQUEST") || statusResponse.getCode().equals("AUTHORIZATION_FAILED") ||
                 statusResponse.getCode().equals("PAYMENT_DECLINED") || statusResponse.getCode().equals("TRANSACTION_NOT_FOUND") ||
                 statusResponse.getCode().equals("PAYMENT_ERROR") || statusResponse.getCode().equals("TIMED_OUT")) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new PaymentStatusResponse(PaymentStatus.FAILED));
+            String clientUrl = "http://localhost:3000/audience-home/payment-status?status=FAILED";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(clientUrl));
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
         }
 
         if (PaymentStatus.COMPLETED.toString().equals(statusResponse.getData().getState())) {
             audience.setStatus(PaymentStatus.COMPLETED);
             eventService.saveOrUpdateAudience(audience);
 
-            return ResponseEntity.status(HttpStatus.OK).body(new PaymentStatusResponse(PaymentStatus.COMPLETED));
+            String clientUrl = "http://localhost:3000/audience-home/payment-status?status=SUCCESS";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(clientUrl));
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
         }
         else if (statusResponse.getCode().equals("INTERNAL_SERVER_ERROR") || PaymentStatus.PENDING.toString().equals(statusResponse.getData().getState())) {
             audience.setStatus(PaymentStatus.PENDING);
             eventService.savePendingPayment(audience);
 
-            return ResponseEntity.status(HttpStatus.OK).body(new PaymentStatusResponse(PaymentStatus.PENDING));
+            String clientUrl = "http://localhost:3000/audience-home/payment-status?status=PENDING";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(clientUrl));
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
         }
         else {
             audience.setStatus(PaymentStatus.FAILED);
             eventService.saveFailedPayment(audience);
 
-            return ResponseEntity.status(HttpStatus.OK).body(new PaymentStatusResponse(PaymentStatus.FAILED));
+            String clientUrl = "http://localhost:3000/audience-home/payment-status?status=FAILED";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setLocation(URI.create(clientUrl));
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
         }
     }
 
