@@ -1,5 +1,6 @@
 package com.esportslan.microservices.esportslanapi;
 
+import com.treblle.spring.annotation.EnableTreblle;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
@@ -14,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableFeignClients
 @EnableEncryptableProperties
 @EnableScheduling
+//@EnableTreblle
 @OpenAPIDefinition(
 		info = @Info(
 				title = "ESportsLAN_APIs",

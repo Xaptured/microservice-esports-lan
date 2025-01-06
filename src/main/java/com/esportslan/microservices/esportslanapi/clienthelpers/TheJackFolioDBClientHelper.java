@@ -5,10 +5,7 @@ import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException;
 import com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException;
-import com.esportslan.microservices.esportslanapi.models.Audience;
-import com.esportslan.microservices.esportslanapi.models.AudienceTicket;
-import com.esportslan.microservices.esportslanapi.models.Event;
-import com.esportslan.microservices.esportslanapi.models.LANTeam;
+import com.esportslan.microservices.esportslanapi.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +63,19 @@ public class TheJackFolioDBClientHelper {
         } catch (InternalErrorException exception) {
             LOGGER.error("Got exception while getting past lan event details");
             throw new InternalErrorException("Got exception while getting past lan event details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Event> fetchLiveEventsWRTEmail(String email) {
+        try {
+            LOGGER.info("Calling database client to get list of live event for email: {}", email);
+            return theJackFolioDBClient.fetchLiveEventsWRTEmail(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while getting live lan event details");
+            throw new BadRequestErrorException("Got exception while getting live lan event details: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while getting live lan event details");
+            throw new InternalErrorException("Got exception while getting live lan event details: " + exception.getMessage(), exception);
         }
     }
 
@@ -367,6 +377,46 @@ public class TheJackFolioDBClientHelper {
         } catch (InternalErrorException exception) {
             LOGGER.error("Got exception while deleting failed payment");
             throw new InternalErrorException("Got exception while deleting failed payment: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void saveSubUser(SubUser subUser) {
+        try {
+            LOGGER.info("Calling database client to save sub user");
+            theJackFolioDBClient.saveSubUser(subUser);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while saving sub user");
+            throw new InternalErrorException("Got exception while saving sub user: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void updateSubUser(SubUser subUser) {
+        try {
+            LOGGER.info("Calling database client to update sub user");
+            theJackFolioDBClient.updateSubUser(subUser);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while updating sub user");
+            throw new InternalErrorException("Got exception while updating sub user: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void updateActive(String eventName) {
+        try {
+            LOGGER.info("Calling database client to update active for sub users");
+            theJackFolioDBClient.updateActive(eventName);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while updating active for sub users");
+            throw new InternalErrorException("Got exception while updating active for sub users: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<SubUser> fetchUnsentEmailSubUsers() {
+        try {
+            LOGGER.info("Calling database client to fetch unsent emails for sub users");
+            return theJackFolioDBClient.fetchUnsentEmailSubUsers().getBody();
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching unsent emails for sub users");
+            throw new InternalErrorException("Got exception while fetching unsent emails for sub users: " + exception.getMessage(), exception);
         }
     }
 }

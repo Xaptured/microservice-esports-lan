@@ -33,6 +33,8 @@ public class StringConstants {
 
     public static final String BOOKING_COMPLETE_BODY = "Hey! \n\nHope you are doing well. We are happy to share that you are successfully booked for the lan event. \nPlease show the below details on the day of lan." ;
 
+    public static final String SUB_USER_CREDENTIAL_BODY = "Hey! \n\nHope you are doing well. We are happy to share that you are successfully registered as sub user. \nPlease find the below details." ;
+
     public static final String THANKS = "\n\nThanks \nXaptured  \n\nThis is an auto triggered email. Please don't reply to this.";
     private StringConstants(){}
 
