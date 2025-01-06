@@ -5,10 +5,7 @@ import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.enums.PaymentStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
-import com.esportslan.microservices.esportslanapi.models.Audience;
-import com.esportslan.microservices.esportslanapi.models.AudienceTicket;
-import com.esportslan.microservices.esportslanapi.models.Event;
-import com.esportslan.microservices.esportslanapi.models.LANTeam;
+import com.esportslan.microservices.esportslanapi.models.*;
 import com.esportslan.microservices.esportslanapi.servicehelpers.EventServiceHelper;
 import com.esportslan.microservices.esportslanapi.utilities.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +43,13 @@ public class EventService {
             throw new ValidationException("Email is invalid");
         }
         return theJackFolioDBClientHelper.fetchPastEventsWRTEmail(email);
+    }
+
+    public List<Event> fetchLiveEventsWRTEmail(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchLiveEventsWRTEmail(email);
     }
 
     public List<LANTeam> fetchTeamWithTeamMate(String email) {
@@ -178,5 +182,25 @@ public class EventService {
 
     public void deleteFailedPayment(String email, String eventName) {
         theJackFolioDBClientHelper.deleteFailedPayment(email, eventName);
+    }
+
+    public void saveSubUser(SubUser subUser) {
+        String userName = subUser.getName() + subUser.getEventName();
+        String userPassword = Utils.generateUUID();
+        subUser.setUserName(userName);
+        subUser.setUserPassword(userPassword);
+        theJackFolioDBClientHelper.saveSubUser(subUser);
+    }
+
+    public void updateSubUser(SubUser subUser) {
+        theJackFolioDBClientHelper.updateSubUser(subUser);
+    }
+
+    public void updateActive(String eventName) {
+        theJackFolioDBClientHelper.updateActive(eventName);
+    }
+
+    public List<SubUser> fetchUnsentEmailSubUsers() {
+        return theJackFolioDBClientHelper.fetchUnsentEmailSubUsers();
     }
 }

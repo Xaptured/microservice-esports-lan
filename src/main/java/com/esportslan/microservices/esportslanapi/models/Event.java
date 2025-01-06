@@ -15,4 +15,5 @@ public class Event {
     private Address address;
     private EventDetails eventDetails;
     private EventStatus eventStatus;
+    private boolean startCheckInProcess;
 }

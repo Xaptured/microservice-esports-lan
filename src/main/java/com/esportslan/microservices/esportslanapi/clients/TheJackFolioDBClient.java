@@ -2,10 +2,7 @@ package com.esportslan.microservices.esportslanapi.clients;
 
 import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
-import com.esportslan.microservices.esportslanapi.models.Audience;
-import com.esportslan.microservices.esportslanapi.models.AudienceTicket;
-import com.esportslan.microservices.esportslanapi.models.Event;
-import com.esportslan.microservices.esportslanapi.models.LANTeam;
+import com.esportslan.microservices.esportslanapi.models.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +20,9 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/past-events/{email}")
     public ResponseEntity<List<Event>> fetchPastEventsWRTEmail(@PathVariable String email);
+
+    @GetMapping("/events-lan/live-events/{email}")
+    public ResponseEntity<List<Event>> fetchLiveEventsWRTEmail(@PathVariable String email);
 
     @PostMapping("/events-lan/save-teams")
     public ResponseEntity<Void> saveTeams(@RequestBody List<LANTeam> team);
@@ -101,4 +101,16 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/fetch-initiate-payment")
     public ResponseEntity<Audience> fetchInitiatePayment(@RequestParam String merchantTransactionId);
+
+    @PostMapping("/events-lan/save-sub-user")
+    public ResponseEntity<Void> saveSubUser(@RequestBody SubUser subUser);
+
+    @PostMapping("/events-lan/update-sub-user")
+    public ResponseEntity<Void> updateSubUser(@RequestBody SubUser subUser);
+
+    @PostMapping("/events-lan/update-active/{eventName}")
+    public ResponseEntity<Void> updateActive(@PathVariable String eventName);
+
+    @GetMapping("/events-lan/fetch-unsent-email-sub-users")
+    public ResponseEntity<List<SubUser>> fetchUnsentEmailSubUsers();
 }

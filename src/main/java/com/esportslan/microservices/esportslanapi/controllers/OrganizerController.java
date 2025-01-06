@@ -2,7 +2,9 @@ package com.esportslan.microservices.esportslanapi.controllers;
 
 import com.esportslan.microservices.esportslanapi.models.Event;
 import com.esportslan.microservices.esportslanapi.models.LANTeam;
+import com.esportslan.microservices.esportslanapi.models.SubUser;
 import com.esportslan.microservices.esportslanapi.services.EventService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -63,5 +65,49 @@ public class OrganizerController {
     public ResponseEntity<List<Event>> fetchPastEventsWRTEmail(@PathVariable String email) {
         List<Event> events = eventService.fetchPastEventsWRTEmail(email);
         return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
+    @Operation(
+            summary = "Fetch live events with respect to email",
+            description = "Fetch live events with respect to email"
+    )
+    @GetMapping("/fetch-live-events/{email}")
+    @Retry(name = "fetch-live-events-retry")
+    public ResponseEntity<List<Event>> fetchLiveEventsWRTEmail(@PathVariable String email) {
+        List<Event> events = eventService.fetchLiveEventsWRTEmail(email);
+        return ResponseEntity.status(HttpStatus.OK).body(events);
+    }
+
+    @Operation(
+            summary = "Save sub user",
+            description = "Save sub user. "
+    )
+    @PostMapping("/save-sub-user")
+    @Retry(name = "save-sub-user-retry")
+    public ResponseEntity<Void> saveSubUser(@RequestBody SubUser subUser) {
+        eventService.saveSubUser(subUser);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(
+            summary = "Update sub user",
+            description = "Update sub user. "
+    )
+    @PostMapping("/update-sub-user")
+    @Retry(name = "update-sub-user-retry")
+    public ResponseEntity<Void> updateSubUser(@RequestBody SubUser subUser) {
+        eventService.updateSubUser(subUser);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @Operation(
+            summary = "Update sub user's active",
+            description = "Update sub user's active. "
+    )
+    @PostMapping("/update-sub-user-active/{eventName}")
+    @Retry(name = "update-sub-user-active-retry")
+    public ResponseEntity<Void> updateSubUserActive(@PathVariable String eventName) {
+        eventService.updateActive(eventName);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
