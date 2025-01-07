@@ -18,4 +18,5 @@ public class AudienceTicket {
     private String eventName;
     private String ticketNumber;
     private boolean emailSent;
+    private boolean isCheckedIn;
 }

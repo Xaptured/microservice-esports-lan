@@ -4,6 +4,7 @@ import com.esportslan.microservices.esportslanapi.clienthelpers.TheJackFolioDBCl
 import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.enums.PaymentStatus;
+import com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
 import com.esportslan.microservices.esportslanapi.models.*;
 import com.esportslan.microservices.esportslanapi.servicehelpers.EventServiceHelper;
@@ -83,7 +84,7 @@ public class EventService {
         theJackFolioDBClientHelper.saveOrUpdateAudience(audience);
         if (audience.getStatus().equals(PaymentStatus.COMPLETED)) {
             String ticketNumber = audience.getEventName() + "-" + Utils.generateUUID();
-            AudienceTicket audienceTicket = new AudienceTicket(audience.getEmail(), audience.getEventName(), ticketNumber, false);
+            AudienceTicket audienceTicket = new AudienceTicket(audience.getEmail(), audience.getEventName(), ticketNumber, false, false);
             theJackFolioDBClientHelper.saveAudienceTicket(audienceTicket);
         }
     }
@@ -202,5 +203,28 @@ public class EventService {
 
     public List<SubUser> fetchUnsentEmailSubUsers() {
         return theJackFolioDBClientHelper.fetchUnsentEmailSubUsers();
+    }
+
+    public SubUserResult verifySubUserCredentials(SubUser user) {
+        SubUser subUser = theJackFolioDBClientHelper.fetchSubUserByUserName(user.getUserName());
+        if (!subUser.isActive()) {
+            throw new BadRequestErrorException("Username doesn't activated yet");
+        }
+        boolean result = user.getUserPassword().equals(subUser.getUserPassword());
+        SubUserResult subUserResult = new SubUserResult(result, subUser.getEventName());
+        return subUserResult;
+
+    }
+
+    public boolean verifyAudienceTicket(AudienceTicket audienceTicket) {
+        AudienceTicket ticket = theJackFolioDBClientHelper.fetchAudienceTicketDetails(audienceTicket.getEventName(), audienceTicket.getEmail());
+        if (ticket.isCheckedIn()) {
+            throw new BadRequestErrorException("User already checked in");
+        }
+        boolean result = ticket.getTicketNumber().equals(audienceTicket.getTicketNumber());
+        if (result) {
+            theJackFolioDBClientHelper.updateCheckedInStatus(audienceTicket.getEventName(), audienceTicket.getEmail());
+        }
+        return result;
     }
 }
