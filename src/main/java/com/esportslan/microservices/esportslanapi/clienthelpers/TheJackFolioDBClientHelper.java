@@ -419,4 +419,40 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while fetching unsent emails for sub users: " + exception.getMessage(), exception);
         }
     }
+
+    public SubUser fetchSubUserByUserName(String username) {
+        try {
+            LOGGER.info("Calling database client to fetch sub user by username");
+            return theJackFolioDBClient.fetchSubUserByUsername(username).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching sub user by username");
+            throw new BadRequestErrorException("Got exception while fetching sub user by username: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching sub user by username");
+            throw new InternalErrorException("Got exception while fetching sub user by username: " + exception.getMessage(), exception);
+        }
+    }
+
+    public AudienceTicket fetchAudienceTicketDetails(String eventName, String email) {
+        try {
+            LOGGER.info("Calling database client to fetch audience ticket details");
+            return theJackFolioDBClient.fetchAudienceTicketDetails(eventName, email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching audience ticket details");
+            throw new BadRequestErrorException("Got exception while fetching audience ticket details: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching audience ticket details");
+            throw new InternalErrorException("Got exception while fetching audience ticket details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void updateCheckedInStatus(String eventName, String email) {
+        try {
+            LOGGER.info("Calling database client to update audience check in status");
+            theJackFolioDBClient.updateCheckedInStatus(eventName, email);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while updating audience check in status");
+            throw new InternalErrorException("Got exception while updating audience check in status: " + exception.getMessage(), exception);
+        }
+    }
 }

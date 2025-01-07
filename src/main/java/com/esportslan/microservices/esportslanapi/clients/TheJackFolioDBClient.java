@@ -113,4 +113,13 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/fetch-unsent-email-sub-users")
     public ResponseEntity<List<SubUser>> fetchUnsentEmailSubUsers();
+
+    @GetMapping("/events-lan/fetch-sub-user-by-username/{username}")
+    public ResponseEntity<SubUser> fetchSubUserByUsername(@PathVariable String username);
+
+    @GetMapping("/events-lan/fetch-audience-ticket-details")
+    public ResponseEntity<AudienceTicket> fetchAudienceTicketDetails(@RequestParam String eventName, @RequestParam String email);
+
+    @PostMapping("/events-lan/update-audience-check-in-status")
+    public ResponseEntity<Void> updateCheckedInStatus(@RequestParam String eventName, @RequestParam String email);
 }

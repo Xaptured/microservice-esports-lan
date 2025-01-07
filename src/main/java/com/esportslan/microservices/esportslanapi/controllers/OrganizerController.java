@@ -1,8 +1,6 @@
 package com.esportslan.microservices.esportslanapi.controllers;
 
-import com.esportslan.microservices.esportslanapi.models.Event;
-import com.esportslan.microservices.esportslanapi.models.LANTeam;
-import com.esportslan.microservices.esportslanapi.models.SubUser;
+import com.esportslan.microservices.esportslanapi.models.*;
 import com.esportslan.microservices.esportslanapi.services.EventService;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
@@ -109,5 +107,28 @@ public class OrganizerController {
     public ResponseEntity<Void> updateSubUserActive(@PathVariable String eventName) {
         eventService.updateActive(eventName);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @Operation(
+            summary = "Verify sub user credentials",
+            description = "Verify sub user credentials."
+    )
+    @PostMapping("/verify-sub-user-credentials")
+    @Retry(name = "verify-sub-user-credentials-retry")
+    public ResponseEntity<SubUserResult> verifySubUserCredentials(@RequestBody SubUser subUser) {
+        SubUserResult subUserResult = eventService.verifySubUserCredentials(subUser);
+        return ResponseEntity.status(HttpStatus.OK).body(subUserResult);
+    }
+
+    @Operation(
+            summary = "Verify audience ticket",
+            description = "Verify audience ticket."
+    )
+    @PostMapping("/verify-audience-ticket")
+    @Retry(name = "verify-audience-ticket-retry")
+    public ResponseEntity<AudienceTicketResult> verifyAudienceTicket(@RequestBody AudienceTicket audienceTicket) {
+        Boolean result = eventService.verifyAudienceTicket(audienceTicket);
+        AudienceTicketResult audienceTicketResult = new AudienceTicketResult(result);
+        return ResponseEntity.status(HttpStatus.OK).body(audienceTicketResult);
     }
 }

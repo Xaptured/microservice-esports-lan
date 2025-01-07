@@ -167,3 +167,17 @@ resilience4j:
           - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
           - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
           - com.esportslan.microservices.esportslanapi.exceptions.ValidationException
+      verify-sub-user-credentials-retry:
+        max-attempts: 3
+        wait-duration: 5s
+        ignore-exceptions:
+          - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.ValidationException
+      verify-audience-ticket-retry:
+        max-attempts: 3
+        wait-duration: 5s
+        ignore-exceptions:
+          - com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException
+          - com.esportslan.microservices.esportslanapi.exceptions.ValidationException
