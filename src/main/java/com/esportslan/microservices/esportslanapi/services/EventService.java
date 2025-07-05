@@ -227,4 +227,20 @@ public class EventService {
         }
         return result;
     }
+
+    public void updateFeedbackDetails(List<Feedback> feedbacks) {
+        eventServiceHelper.validateFeedbackDetails(feedbacks);
+        theJackFolioDBClientHelper.updateFeedbackDetails(feedbacks);
+    }
+
+    public Feedback fetchFeedbackDetails(String email) {
+        if (Utils.isStringEmptyOrBlank(email)) {
+            throw new ValidationException("Email is invalid");
+        }
+        return theJackFolioDBClientHelper.fetchFeedbackDetails(email);
+    }
+
+    public List<Feedback> fetchOnwMonthOlderFeedbacks() {
+        return theJackFolioDBClientHelper.fetchOnwMonthOlderFeedbacks();
+    }
 }

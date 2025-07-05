@@ -2,10 +2,7 @@ package com.esportslan.microservices.esportslanapi.servicehelpers;
 
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
-import com.esportslan.microservices.esportslanapi.models.Audience;
-import com.esportslan.microservices.esportslanapi.models.Event;
-import com.esportslan.microservices.esportslanapi.models.LANTeam;
-import com.esportslan.microservices.esportslanapi.models.LANTeamMate;
+import com.esportslan.microservices.esportslanapi.models.*;
 import com.esportslan.microservices.esportslanapi.utilities.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,6 +109,18 @@ public class EventServiceHelper {
         }
         if (audience.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new ValidationException("Amount is invalid");
+        }
+    }
+
+    public void validateFeedbackDetails(List<Feedback> feedbacks) {
+        LOGGER.info("Validating feedback object");
+        for (Feedback feedback : feedbacks) {
+            if (Utils.isStringEmptyOrBlank(feedback.getEmail())) {
+                throw new ValidationException("Email is invalid");
+            }
+            if (Utils.isStringEmptyOrBlank(feedback.getDate())) {
+                throw new ValidationException("Date is invalid");
+            }
         }
     }
 }
