@@ -455,4 +455,40 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while updating audience check in status: " + exception.getMessage(), exception);
         }
     }
+
+    public void updateFeedbackDetails(List<Feedback> feedbacks) {
+        try {
+            LOGGER.info("Calling database client to update feedback details");
+            theJackFolioDBClient.updateFeedback(feedbacks);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while updating feedback details");
+            throw new InternalErrorException("Got exception while updating feedback details: " + exception.getMessage(), exception);
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while updating feedback details");
+            throw new BadRequestErrorException("Got exception while updating feedback details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public Feedback fetchFeedbackDetails(String email) {
+        try {
+            LOGGER.info("Calling database client to fetch feedback details");
+            return theJackFolioDBClient.fetchFeedbackByEmail(email).getBody();
+        } catch (BadRequestErrorException exception) {
+            LOGGER.error("Got exception while fetching feedback details");
+            throw new BadRequestErrorException("Got exception while fetching feedback details: " + exception.getMessage(), exception);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching feedback details");
+            throw new InternalErrorException("Got exception while fetching feedback details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Feedback> fetchOnwMonthOlderFeedbacks() {
+        try {
+            LOGGER.info("Calling database client to fetch feedback one month older details");
+            return theJackFolioDBClient.getFeedbackExactlyOneMonthOld().getBody();
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching feedback one month older details");
+            throw new InternalErrorException("Got exception while fetching feedback one month older details: " + exception.getMessage(), exception);
+        }
+    }
 }

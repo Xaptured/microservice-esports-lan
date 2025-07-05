@@ -122,4 +122,13 @@ public interface TheJackFolioDBClient {
 
     @PostMapping("/events-lan/update-audience-check-in-status")
     public ResponseEntity<Void> updateCheckedInStatus(@RequestParam String eventName, @RequestParam String email);
+
+    @GetMapping("/events-lan/fetch-feedback-by-email/{email}")
+    public ResponseEntity<Feedback> fetchFeedbackByEmail(@PathVariable String email);
+
+    @PostMapping("/events-lan/update-feedback")
+    public ResponseEntity<Void> updateFeedback(@RequestBody List<Feedback> feedbacks);
+
+    @GetMapping("/events-lan/fetch-feedbacks")
+    public ResponseEntity<List<Feedback>> getFeedbackExactlyOneMonthOld();
 }
