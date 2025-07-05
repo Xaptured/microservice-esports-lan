@@ -19,7 +19,7 @@ public class FeedbackSchedulingService {
     @Autowired
     private EventService eventService;
 
-    @Scheduled(cron = "0 */15 * * * *")
+    @Scheduled(cron = "0 0 1 * * *")
     public void updateFeedbackStatus() {
         List<Feedback> feedbackList = eventService.fetchOnwMonthOlderFeedbacks();
         if (feedbackList != null && !feedbackList.isEmpty()) {
