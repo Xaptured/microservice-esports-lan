@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +20,7 @@ public class FeedbackController {
 
     @Autowired
     private EventService eventService;
+
     @Operation(
             summary = "Fetch feedback details with respect to email",
             description = "Fetch feedback details with respect to email"
@@ -32,5 +30,16 @@ public class FeedbackController {
     public ResponseEntity<Feedback> fetchFeedbackDetails(@PathVariable String email) {
         Feedback feedback = eventService.fetchFeedbackDetails(email);
         return ResponseEntity.status(HttpStatus.OK).body(feedback);
+    }
+
+    @Operation(
+            summary = "Update feedback details",
+            description = "Update feedback details"
+    )
+    @PostMapping("/update-feedback")
+    @Retry(name = "update-feedback-retry")
+    public ResponseEntity<Void> updateFeedback(@RequestBody Feedback feedback) {
+        eventService.updateFeedback(feedback);
+        return ResponseEntity.noContent().build();
     }
 }
