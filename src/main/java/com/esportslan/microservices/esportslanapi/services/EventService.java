@@ -12,6 +12,9 @@ import com.esportslan.microservices.esportslanapi.utilities.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -226,6 +229,16 @@ public class EventService {
             theJackFolioDBClientHelper.updateCheckedInStatus(audienceTicket.getEventName(), audienceTicket.getEmail());
         }
         return result;
+    }
+
+    public void updateFeedback(Feedback feedback) {
+        LocalDate today = LocalDate.now();
+        Date sqlDate = Date.valueOf(today);
+        feedback.setDate(sqlDate.toString());
+
+        List<Feedback> feedbacks = new ArrayList<>();
+        feedbacks.add(feedback);
+        updateFeedbackDetails(feedbacks);
     }
 
     public void updateFeedbackDetails(List<Feedback> feedbacks) {
