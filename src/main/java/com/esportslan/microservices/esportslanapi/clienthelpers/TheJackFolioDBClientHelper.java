@@ -491,4 +491,24 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while fetching feedback one month older details: " + exception.getMessage(), exception);
         }
     }
+
+    public List<Advertisement> getAdvertisementDetails() {
+        try {
+            LOGGER.info("Calling database client to fetch advertisement details");
+            return theJackFolioDBClient.getAdvertisementDetails().getBody();
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while fetching advertisement details");
+            throw new InternalErrorException("Got exception while fetching advertisement details: " + exception.getMessage(), exception);
+        }
+    }
+
+    public void saveAdvertisement(Advertisement advertisement) {
+        try {
+            LOGGER.info("Calling database client to save advertisement");
+            theJackFolioDBClient.saveAdvertisement(advertisement);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while saving advertisement details");
+            throw new InternalErrorException("Got exception while saving advertisement details: " + exception.getMessage(), exception);
+        }
+    }
 }

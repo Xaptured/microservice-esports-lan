@@ -123,4 +123,18 @@ public class EventServiceHelper {
             }
         }
     }
+
+    public void validateAdvertisementDetails(Advertisement advertisement) {
+        LOGGER.info("Validating advertisement object");
+
+        if (Utils.isStringEmptyOrBlank(advertisement.getAdvertiserName())) {
+            throw new ValidationException("Advertisement name is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(advertisement.getImagePath())) {
+            throw new ValidationException("Image path is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(advertisement.getAltText())) {
+            throw new ValidationException("Alter text is invalid");
+        }
+    }
 }

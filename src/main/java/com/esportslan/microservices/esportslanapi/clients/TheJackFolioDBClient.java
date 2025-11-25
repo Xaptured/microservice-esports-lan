@@ -131,4 +131,10 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/fetch-feedbacks")
     public ResponseEntity<List<Feedback>> getFeedbackExactlyOneMonthOld();
+
+    @PostMapping("/events-lan/save-advertisement")
+    public ResponseEntity<Void> saveAdvertisement(@RequestBody Advertisement advertisement);
+
+    @GetMapping("/events-lan/fetch-advertisements")
+    public ResponseEntity<List<Advertisement>> getAdvertisementDetails();
 }
