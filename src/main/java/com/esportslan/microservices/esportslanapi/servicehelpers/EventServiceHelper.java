@@ -137,4 +137,18 @@ public class EventServiceHelper {
             throw new ValidationException("Alter text is invalid");
         }
     }
+
+    public void validateUpdateRequestDetails(UpdateRequest updateRequest) {
+        LOGGER.info("Validating update request object");
+
+        if (updateRequest.getCategory() == null) {
+            throw new ValidationException("Category is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(updateRequest.getTournamentId())) {
+            throw new ValidationException("Tournament id is invalid");
+        }
+        if (Utils.isStringEmptyOrBlank(updateRequest.getTitle())) {
+            throw new ValidationException("Title is invalid");
+        }
+    }
 }
