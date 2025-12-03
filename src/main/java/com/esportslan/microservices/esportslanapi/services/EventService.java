@@ -13,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class EventService {
@@ -24,6 +26,8 @@ public class EventService {
     private EventServiceHelper eventServiceHelper;
     @Autowired
     private TheJackFolioDBClientHelper theJackFolioDBClientHelper;
+    @Autowired
+    private LiveUpdateEventPublisher liveUpdateEventPublisher;
 
     public void saveOrUpdateEvent(Event event, boolean isUpdate) {
         eventServiceHelper.validateEvent(event);
@@ -255,5 +259,19 @@ public class EventService {
 
     public List<Feedback> fetchOnwMonthOlderFeedbacks() {
         return theJackFolioDBClientHelper.fetchOnwMonthOlderFeedbacks();
+    }
+
+    public void publishUpdateRequestDetails(UpdateRequest request) {
+        eventServiceHelper.validateUpdateRequestDetails(request);
+
+        UpdateRequestEvent event = new UpdateRequestEvent();
+        event.setEventId(UUID.randomUUID().toString());
+        event.setCategory(request.getCategory());
+        event.setTournamentId(request.getTournamentId());
+        event.setTitle(request.getTitle());
+        event.setMessage(request.getMessage());
+        event.setCreatedAt(Instant.now());
+
+        liveUpdateEventPublisher.publish(event);
     }
 }

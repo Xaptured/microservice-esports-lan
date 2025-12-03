@@ -131,4 +131,15 @@ public class OrganizerController {
         AudienceTicketResult audienceTicketResult = new AudienceTicketResult(result);
         return ResponseEntity.status(HttpStatus.OK).body(audienceTicketResult);
     }
+
+    @Operation(
+            summary = "Add a new message fpr audience",
+            description = "Add a new message fpr audience."
+    )
+    @PostMapping("/live-updates")
+    @Retry(name = "live-updates-retry")
+    public ResponseEntity<Void> createLiveUpdate(@RequestBody UpdateRequest updateRequest) {
+        eventService.publishUpdateRequestDetails(updateRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }

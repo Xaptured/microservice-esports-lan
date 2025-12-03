@@ -48,4 +48,11 @@ public class ExceptionHandlerAdvice {
         ExceptionBody exceptionBody = new ExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionBody);
     }
+
+    @ExceptionHandler(EventPublisherException.class)
+    public ResponseEntity<ExceptionBody> handleEventPublisherErrorException(EventPublisherException exception) {
+        LOGGER.error("Event publisher exception occurred: " + exception.getMessage());
+        ExceptionBody exceptionBody = new ExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionBody);
+    }
 }
