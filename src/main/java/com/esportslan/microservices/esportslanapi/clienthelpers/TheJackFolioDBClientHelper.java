@@ -511,4 +511,24 @@ public class TheJackFolioDBClientHelper {
             throw new InternalErrorException("Got exception while saving advertisement details: " + exception.getMessage(), exception);
         }
     }
+
+    public void saveTournamentImages(TournamentImageDBRequest tournamentImages) {
+        try {
+            LOGGER.info("Calling database client to save tournament images");
+            theJackFolioDBClient.saveTournamentImages(tournamentImages);
+        } catch (InternalErrorException exception) {
+            LOGGER.error("Got exception while saving tournament images");
+            throw new InternalErrorException("Got exception while saving tournament images: " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Image> fetchImagesByTournamentName(String tournamentName) {
+        try {
+            LOGGER.info("Calling database client to fetch images by tournament name");
+            return theJackFolioDBClient.fetchImagesByTournamentName(tournamentName).getBody();
+        } catch (Exception exception) {
+            LOGGER.error("Got exception while fetching images by tournament name: {}", tournamentName);
+            throw new InternalErrorException("Got exception while fetching images by tournament name: " + exception.getMessage(), exception);
+        }
+    }
 }

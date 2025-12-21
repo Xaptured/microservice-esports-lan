@@ -137,4 +137,10 @@ public interface TheJackFolioDBClient {
 
     @GetMapping("/events-lan/fetch-advertisements")
     public ResponseEntity<List<Advertisement>> getAdvertisementDetails();
+
+    @PostMapping("/events-lan/save-tournament-images")
+    public ResponseEntity<Void> saveTournamentImages(@RequestBody TournamentImageDBRequest tournamentImages);
+
+    @GetMapping("/events-lan/fetch-tournament-images")
+    public ResponseEntity<List<Image>> fetchImagesByTournamentName(@RequestParam String tournamentName);
 }
