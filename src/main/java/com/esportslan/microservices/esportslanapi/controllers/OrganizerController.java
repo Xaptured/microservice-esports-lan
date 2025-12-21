@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -133,13 +134,36 @@ public class OrganizerController {
     }
 
     @Operation(
-            summary = "Add a new message fpr audience",
-            description = "Add a new message fpr audience."
+            summary = "Add a new message for audience",
+            description = "Add a new message for audience."
     )
     @PostMapping("/live-updates")
     @Retry(name = "live-updates-retry")
     public ResponseEntity<Void> createLiveUpdate(@RequestBody UpdateRequest updateRequest) {
         eventService.publishUpdateRequestDetails(updateRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @Operation(
+            summary = "Add images for tournament",
+            description = "Add images for tournament."
+    )
+    @PostMapping(value = "/save-images",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Retry(name = "save-images-retry")
+    public ResponseEntity<Void> saveTournamentImages(@ModelAttribute TournamentImages images) {
+        eventService.saveTournamentImages(images);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(
+            summary = "Fetch images for tournament",
+            description = "Fetch images for tournament."
+    )
+    @GetMapping("/fetch-images")
+    @Retry(name = "fetch-images-retry")
+    public ResponseEntity<List<Image>> fetchImagesForTournament(@RequestParam String tournamentName) {
+        List<Image> images = eventService.fetchImagesForTournament(tournamentName);
+        return  ResponseEntity.status(HttpStatus.OK).body(images);
     }
 }

@@ -5,13 +5,20 @@ import com.esportslan.microservices.esportslanapi.enums.EventStatus;
 import com.esportslan.microservices.esportslanapi.enums.LANTeamStatus;
 import com.esportslan.microservices.esportslanapi.enums.PaymentStatus;
 import com.esportslan.microservices.esportslanapi.exceptions.BadRequestErrorException;
+import com.esportslan.microservices.esportslanapi.exceptions.InternalErrorException;
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
 import com.esportslan.microservices.esportslanapi.models.*;
 import com.esportslan.microservices.esportslanapi.servicehelpers.EventServiceHelper;
 import com.esportslan.microservices.esportslanapi.utilities.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -22,12 +29,19 @@ import java.util.UUID;
 @Service
 public class EventService {
 
+    private static final String MEDIA_TOURNAMENT = "/media/tournaments/";
+
     @Autowired
     private EventServiceHelper eventServiceHelper;
     @Autowired
     private TheJackFolioDBClientHelper theJackFolioDBClientHelper;
     @Autowired
     private LiveUpdateEventPublisher liveUpdateEventPublisher;
+
+    @Value("${tournament.images.folder}")
+    private String tournamentImageFolder;
+    @Value("${server.base.url}")
+    private String baseURL;
 
     public void saveOrUpdateEvent(Event event, boolean isUpdate) {
         eventServiceHelper.validateEvent(event);
@@ -273,5 +287,46 @@ public class EventService {
         event.setCreatedAt(Instant.now());
 
         liveUpdateEventPublisher.publish(event);
+    }
+
+    public void saveTournamentImages(TournamentImages tournamentImages) {
+        try {
+            String tournamentName = tournamentImages.getTournamentName();
+
+            Path basePath = Paths.get(tournamentImageFolder);
+            Path folder = basePath.resolve(tournamentName);
+
+            if (!Files.exists(folder)) {
+                Files.createDirectories(folder);
+            }
+
+            TournamentImageDBRequest request = new TournamentImageDBRequest();
+            request.setTournamentName(tournamentName);
+
+            List<Image> images = new ArrayList<>();
+            for (MultipartFile file : tournamentImages.getImages()) {
+
+                String fileName = UUID.randomUUID() + "-" + file.getOriginalFilename();
+                Path imagePath = folder.resolve(fileName);
+
+                Files.copy(file.getInputStream(), imagePath);
+
+                String url = baseURL + MEDIA_TOURNAMENT + tournamentName + "/" + fileName;
+                Image image = new Image();
+                image.setImageName(fileName);
+                image.setImagePath(url);
+
+                images.add(image);
+            }
+            request.setImages(images);
+
+            theJackFolioDBClientHelper.saveTournamentImages(request);
+        } catch (IOException exception) {
+            throw new InternalErrorException("IO exception occurred while saving images " + exception.getMessage(), exception);
+        }
+    }
+
+    public List<Image> fetchImagesForTournament(String tournamentName) {
+        return theJackFolioDBClientHelper.fetchImagesByTournamentName(tournamentName);
     }
 }

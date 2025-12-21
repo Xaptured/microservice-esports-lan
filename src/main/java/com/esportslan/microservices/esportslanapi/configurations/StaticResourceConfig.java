@@ -22,12 +22,24 @@ public class StaticResourceConfig implements WebMvcConfigurer {
     @Value("${advertisements.image.folder}")
     private String adsImageFolder;
 
+    @Value("${tournament.images.folder}")
+    private String tournamentImageFolder;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String location = "file:///" + new File(adsImageFolder).getAbsolutePath().replace("\\", "/") + "/";
         LOGGER.info("Fetching from location: {}",  location);
         registry.addResourceHandler("/media/**")
                 .addResourceLocations(location)
+                .setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS).cachePublic());
+
+        String tourLocation = "file:///" +
+                new File(tournamentImageFolder).getAbsolutePath().replace("\\", "/") + "/";
+
+        LOGGER.info("Hosting tournament images from: {}", tourLocation);
+
+        registry.addResourceHandler("/media/tournaments/**")
+                .addResourceLocations(tourLocation)
                 .setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS).cachePublic());
     }
 
