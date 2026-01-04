@@ -9,11 +9,13 @@ import com.esportslan.microservices.esportslanapi.exceptions.InternalErrorExcept
 import com.esportslan.microservices.esportslanapi.exceptions.ValidationException;
 import com.esportslan.microservices.esportslanapi.models.*;
 import com.esportslan.microservices.esportslanapi.servicehelpers.EventServiceHelper;
+import com.esportslan.microservices.esportslanapi.utilities.CityCodes;
 import com.esportslan.microservices.esportslanapi.utilities.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +24,7 @@ import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +33,8 @@ import java.util.UUID;
 public class EventService {
 
     private static final String MEDIA_TOURNAMENT = "/media/tournaments/";
+    private static final DateTimeFormatter MMT_FORMAT = DateTimeFormatter.ofPattern("MMddyyyy");
+    private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Autowired
     private EventServiceHelper eventServiceHelper;
@@ -42,6 +47,10 @@ public class EventService {
     private String tournamentImageFolder;
     @Value("${server.base.url}")
     private String baseURL;
+    @Value("${makemytrip.base.url}")
+    private String makeMyTripBaseURL;
+    @Value("${googlemap.base.url}")
+    private String googleMapsBaseURL;
 
     public void saveOrUpdateEvent(Event event, boolean isUpdate) {
         eventServiceHelper.validateEvent(event);
@@ -328,5 +337,60 @@ public class EventService {
 
     public List<Image> fetchImagesForTournament(String tournamentName) {
         return theJackFolioDBClientHelper.fetchImagesByTournamentName(tournamentName);
+    }
+
+    public StayLink generateStayLinks(String eventName) {
+        if (Utils.isStringEmptyOrBlank(eventName)) {
+            throw new ValidationException("Event name is invalid");
+        }
+
+        Event eventDetails = theJackFolioDBClientHelper.fetchLANEventDetails(eventName);
+        eventServiceHelper.validateEvent(eventDetails);
+
+        String eventDate = eventDetails.getEventDetails().getDate();
+        System.out.println("Actual date: " + eventDate);
+        LocalDate date = LocalDate.parse(eventDate, INPUT_FORMAT);
+        String checkInDate = date.minusDays(1).format(MMT_FORMAT);
+        System.out.println("Check In date: " + checkInDate);
+        String checkOutDate = date.plusDays(1).format(MMT_FORMAT);
+        System.out.println("Check Out date: " + checkOutDate);
+
+        String cityCode = CityCodes.resolveCityCode(eventDetails.getAddress().getCity());
+
+        String url = UriComponentsBuilder
+                .fromHttpUrl(makeMyTripBaseURL)
+                .queryParam("checkin", checkInDate)
+                .queryParam("checkout", checkOutDate)
+                .queryParam("city", cityCode)
+                .queryParam("country", "IN")
+                .queryParam("roomStayQualifier", "2e0e")
+                .build()
+                .toUriString();
+
+        return new StayLink("MAKEMYTRIP", url);
+    }
+
+    public TravelLink generateTravelLinks(String eventName) {
+        if (Utils.isStringEmptyOrBlank(eventName)) {
+            throw new ValidationException("Event name is invalid");
+        }
+
+        Event eventDetails = theJackFolioDBClientHelper.fetchLANEventDetails(eventName);
+        eventServiceHelper.validateEvent(eventDetails);
+
+        String destination = eventDetails.getAddress().getCity();
+
+        String url = UriComponentsBuilder
+                .fromHttpUrl(googleMapsBaseURL)
+                .queryParam("api", "1")
+                .queryParam("destination", destination)
+                .build()
+                .toUriString();
+
+        return new TravelLink(
+                destination,
+                "GOOGLE_MAPS",
+                url
+        );
     }
 }
